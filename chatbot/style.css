@@ -1,0 +1,167 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  color: black;
+}
+
+body {
+  background-color: #e5e6e4;
+  color: white;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #0f3b94;
+  font-size: 16px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.signin {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+
+.signup {
+  background: #0f3b94;
+  color: rgb(247, 247, 247);
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 60px;
+}
+
+.hero-text {
+  max-width: 50%;
+}
+
+.hero-text h1 {
+  font-size: 50px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #cf5c08;
+}
+
+.hero-text p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.btn {
+  display: inline-block;
+  background: #0f3b94;
+  color: rgb(253, 253, 253);
+  padding: 12px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.trusted {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #140014;
+}
+
+.logos {
+  margin-top: 15px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.logos img {
+  height: 35px;
+  filter: brightness(0) invert(1);
+}
+
+/* Hero Image */
+.hero-image {
+  position: relative;
+  max-width: 40%;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 350px;
+}
+
+.chat-bubble {
+  position: absolute;
+  top: -40px;
+  right: 30px;
+  background: white;
+  color: black;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 80px;
+}
+
+.hero-image img{
+ height: 58vh;
+ width: 60vw;
+  margin-right: 80px;
+  margin-top: 20px;
+}
+
+ul li a:hover{
+  font-size: 20px;
+  color: rgb(255, 66, 97);
+  transition: 0.1s;
+}
+
+.logos a i{
+  color: white;
+}
+
+#int{
+  color: #f90286;
+}
+
+#fb{
+  color: #3c7dff;
+}
+
+#yt{
+  color: #f90202;
+}
+
+#gg{
+  color: #05e79f;
+}

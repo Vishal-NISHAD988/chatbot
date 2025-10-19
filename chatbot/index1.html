@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admission Chatbot</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #240046;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            width: 550px;
+            height: 800px;
+            background: #8d99ae;
+            border-radius: 14px;
+            
+            box-shadow: 5px 5px 15px red, -5px -5px 15px rgb(183, 255, 0), 5px -5px 15px green, -5px 5px 15px orange;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+           
+        }
+
+        .chat-header {
+            background: #0f3b94;
+            color: #fff;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #new-chat-btn {
+            background: #ffffff;
+            color: #00bcd4;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #new-chat-btn:hover {
+            background: #fef6e1;
+        }
+
+
+
+        .chat-box {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #ede0d4;
+        }
+
+        .bot-message,
+        .user-message {
+            max-width: 78%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            line-height: 1.35;
+            word-wrap: break-word;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+        }
+
+        .bot-message {
+            background: #6d24ff;
+            align-self: flex-start;
+            color: #ffffff;
+        }
+
+        .user-message {
+            background: #c10091;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 1px solid #eee;
+            background: #3c096c;
+            border-radius: 14px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #e6eef0;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #user-input:focus {
+            box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.12);
+            border-color: #ff0000;
+            border-width: 2px;
+        }
+
+        #send-btn {
+            background: #38b000;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <span><b>RoboReply</b></span>
+            <button id="new-chat-btn">New Chat</button>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <div class="bot-message">Hello! 👋 I am kipm admission  enquiry chatbot. Ask me anything about admissions.</div>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" />
+            <button id="send-btn"><i class="fa-solid fa-paper-plane fa-1.5x"></i></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+        const newChatBtn = document.getElementById("new-chat-btn");
+
+        let faqData = {};
+        fetch("data.json")
+            .then(res => res.json())
+            .then(data => { faqData = data; })
+            .catch(() => { faqData = {}; });
+
+        function addMessage(text, sender) {
+            const d = document.createElement("div");
+            d.className = sender === "user" ? "user-message" : "bot-message";
+            d.textContent = text;
+            chatBox.appendChild(d);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function findBestResponse(question) {
+            if (!question) return null;
+            const q = question.toLowerCase().trim();
+            if (faqData[q]) return faqData[q];
+
+            for (const key of Object.keys(faqData)) {
+                if (q.includes(key.toLowerCase())) return faqData[key];
+            }
+
+            const words = q.split(/\s+/).filter(Boolean);
+            for (const key of Object.keys(faqData)) {
+                for (const w of words) {
+                    if (w.length > 2 && key.toLowerCase().includes(w)) return faqData[key];
+                }
+            }
+            return null;
+        }
+
+        function handleSend() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            addMessage(text, "user");
+            userInput.value = "";
+            userInput.focus();
+
+            const response = findBestResponse(text);
+            setTimeout(() => {
+                if (response) addMessage(response, "bot");
+                else addMessage("Sorry, I don't have an answer for that. Please contact the admission office.", "bot");
+            }, 450);
+        }
+
+        sendBtn.addEventListener("click", handleSend);
+        userInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+
+        
+        newChatBtn.addEventListener("click", () => {
+            chatBox.innerHTML = "";
+            addMessage("Hello! 👋 I am kipm admission  enquiry chatbot. Ask me anything about admissions.", "bot");
+        });
+    });
+
+</script>
+</body>
+
+</html>
